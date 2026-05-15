@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Reel Counter</string>
+    <string name="accessibility_description">Counts scroll swipes inside Instagram (max 1 every 2 seconds) so you can see your daily, weekly, monthly and yearly totals.</string>
+</resources>
