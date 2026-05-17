@@ -52,6 +52,9 @@ public class ReelAccessibilityService extends AccessibilityService {
                     new Thread(() -> {
                         db.swipeDao().insert(new SwipeEvent(now, 1, sessionId));
                         WeeklyReportManager.checkLimitsAndNotify(getApplicationContext());
+                        String today = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new java.util.Date());
+                        Log.i(TAG, "day count: " + db.swipeDao().getEventsByDate(today).size());
+                        Log.i(TAG, today);
                     }).start();
                 }
             } else if (!descStr.contains("reel")) {
