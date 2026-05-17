@@ -102,11 +102,6 @@ public class ReelAccessibilityService extends AccessibilityService {
                 ? prefs.getLong(Prefs.KEY_DEBOUNCE_MS, Prefs.DEFAULT_DEBOUNCE_MS)
                 : Prefs.DEFAULT_DEBOUNCE_MS;
 
-        if (now - lastCountedAt < SESSION_TIMEOUT_MS) {
-            if (isDiagnostic()) Log.d(TAG, "IGNORED same session (within " + SESSION_TIMEOUT_MS + "ms)");
-            return;
-        }
-
         if (now - lastCountedAt < debounceMs) {
             if (isDiagnostic()) Log.d(TAG, "IGNORED debounce window (" + debounceMs + "ms)");
             return;
