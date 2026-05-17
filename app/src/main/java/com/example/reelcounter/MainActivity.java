@@ -317,6 +317,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+//        WeeklyReportManager.sendWeeklyReport(this); //sends the weekly report immediately after opening the app
         statusText.setText(isServiceEnabled()
                 ? "Service: ENABLED ✓"
                 : "Service: DISABLED. Tap Settings and enable Reel Counter.");

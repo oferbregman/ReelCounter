@@ -75,14 +75,19 @@ public class WeeklyReportManager {
 
         new Thread(() -> {
             // Time boundaries
-            long thisWeekStart = getStartOfWeek();
-            long lastWeekStart = thisWeekStart - (7L * 24 * 60 * 60 * 1000);
-            long lastWeekEnd   = thisWeekStart; // exclusive
             long todayStart    = getStartOfDay();
 
+            // "this week" = the just-finished week: last Sunday 00:00 to this Sunday 00:00
+            long thisWeekEnd   = getStartOfWeek();   // this Sunday midnight = end of last week
+            long thisWeekStart = thisWeekEnd - (7L * 24 * 60 * 60 * 1000); // last Sunday
+
+            // "last week" = the week before that
+            long lastWeekEnd   = thisWeekStart;
+            long lastWeekStart = thisWeekEnd - (14L * 24 * 60 * 60 * 1000);
+
             // This week
-            int thisWeekCount = db.swipeDao().countSessionsSince(thisWeekStart);
-            Long thisWeekUsageMs = db.swipeDao().getUsageMillisSince(thisWeekStart);
+            int thisWeekCount = db.swipeDao().countSessionsBetween(thisWeekStart, thisWeekEnd);
+            Long thisWeekUsageMs = db.swipeDao().getUsageMillisBetween(thisWeekStart, thisWeekEnd);
             float thisWeekDist = calculateDistance(thisWeekCount, screenLengthCm);
             float thisWeekRpm  = calculateRPM(thisWeekCount, thisWeekUsageMs);
 

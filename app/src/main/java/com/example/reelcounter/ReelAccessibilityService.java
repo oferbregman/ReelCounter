@@ -4,7 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityEvent;import java.util.Locale;
 
 public class ReelAccessibilityService extends AccessibilityService {
 
@@ -124,6 +124,9 @@ public class ReelAccessibilityService extends AccessibilityService {
             db.swipeDao().insert(new SwipeEvent(now, dy, sessionId));
             // Now the row is in the DB — limit check will see the correct count.
             WeeklyReportManager.checkLimitsAndNotify(getApplicationContext());
+            String today = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).format(new java.util.Date());
+            Log.i(TAG, "day count: " + db.swipeDao().getEventsByDate(today).size());
+            Log.i(TAG, today);
         }).start();
     }
 
