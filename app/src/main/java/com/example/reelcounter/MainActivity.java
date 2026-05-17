@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.util.DisplayMetrics;import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -390,10 +391,12 @@ public class MainActivity extends AppCompatActivity {
         return (scrollCount * screenLengthCm) / 100000f;
     }
 
+
     private float calculateRPM(int scrollCount, Long usageMs) {
         if (usageMs == null || usageMs <= 0) return 0f;
-        long minutes = usageMs / (60 * 1000);
+        long minutes = usageMs / (60 * 10000);
         if (minutes <= 0) return 0f;
+        Log.d("rpm", "scrollCount=" + scrollCount + "  minutes=" + minutes + "  rpm=" + (float) scrollCount / minutes);
         return scrollCount / (float) minutes;
     }
 

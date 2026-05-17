@@ -16,6 +16,7 @@ public class ReelAccessibilityService extends AccessibilityService {
     private long lastCountedAt = 0L;
     private long currentSessionId = 0L;
     private SharedPreferences prefs;
+    private String lastActiveTab = "";
 
     @Override
     public void onServiceConnected() {
@@ -29,10 +30,37 @@ public class ReelAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event == null) return;
-        if (event.getEventType() != AccessibilityEvent.TYPE_VIEW_SCROLLED) return;
 
         CharSequence pkg = event.getPackageName();
         if (pkg == null || !IG_PACKAGE.contentEquals(pkg)) return;
+
+        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_SELECTED ||
+                event.getEventType() == AccessibilityEvent.TYPE_VIEW_CLICKED) {
+            CharSequence desc = event.getContentDescription();
+            String descStr = desc != null ? desc.toString().toLowerCase() : "";
+            if (descStr.contains("reel") && !lastActiveTab.equals("reels")) {
+                lastActiveTab = "reels";
+                long now = System.currentTimeMillis();
+                long debounceMs = prefs != null
+                        ? prefs.getLong(Prefs.KEY_DEBOUNCE_MS, Prefs.DEFAULT_DEBOUNCE_MS)
+                        : Prefs.DEFAULT_DEBOUNCE_MS;
+                if (now - lastCountedAt >= debounceMs) {
+                    lastCountedAt = now;
+                    currentSessionId = now;
+                    AppDatabase db = AppDatabase.getInstance(getApplicationContext());
+                    final long sessionId = currentSessionId;
+                    new Thread(() -> {
+                        db.swipeDao().insert(new SwipeEvent(now, 1, sessionId));
+                        WeeklyReportManager.checkLimitsAndNotify(getApplicationContext());
+                    }).start();
+                }
+            } else if (!descStr.contains("reel")) {
+                lastActiveTab = "";
+            }
+            return;
+        }
+
+        if (event.getEventType() != AccessibilityEvent.TYPE_VIEW_SCROLLED) return;
 
         String cls = event.getClassName() != null
                 ? event.getClassName().toString() : "(null)";
