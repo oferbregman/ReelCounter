@@ -1,129 +1,529 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:orientation="vertical"
+    android:background="#0F0F0F">
 
+    <!-- Status Bar -->
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Service: DISABLED"
+        android:textSize="13sp"
+        android:textColor="#FF9800"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="#1C1C1C"
+        android:gravity="center"
+        android:letterSpacing="0.05" />
+
+    <!-- Tab Host -->
+    <TabHost
+        android:id="@+id/tabHost"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#1C1C1C" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- TODAY TAB -->
+                <ScrollView
+                    android:id="@+id/todayTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TODAY"
+                            android:textSize="11sp"
+                            android:textColor="#666666"
+                            android:letterSpacing="0.15"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/todayCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="72sp"
+                            android:textStyle="bold"
+                            android:textColor="#00D9FF"
+                            android:lineSpacingMultiplier="0.85"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="reels watched"
+                            android:textSize="14sp"
+                            android:textColor="#666666"
+                            android:layout_marginBottom="28dp" />
+
+                        <!-- Stats row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="24dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:background="#1C1C1C"
+                                android:padding="14dp"
+                                android:layout_marginEnd="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="DISTANCE"
+                                    android:textSize="10sp"
+                                    android:textColor="#555555"
+                                    android:letterSpacing="0.12"
+                                    android:layout_marginBottom="4dp" />
+
+                                <TextView
+                                    android:id="@+id/todayDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.00 km"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#00FF88" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:background="#1C1C1C"
+                                android:padding="14dp"
+                                android:layout_marginStart="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="SPEED"
+                                    android:textSize="10sp"
+                                    android:textColor="#555555"
+                                    android:letterSpacing="0.12"
+                                    android:layout_marginBottom="4dp" />
+
+                                <TextView
+                                    android:id="@+id/todayRPM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0 rpm"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#FF9800" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Buttons -->
+                        <Button
+                            android:id="@+id/dailyLimitBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:text="Set Daily Limit"
+                            android:textSize="14sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#252525"
+                            android:layout_marginBottom="10dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <Button
+                            android:id="@+id/screenLengthBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:text="Set Screen Length"
+                            android:textSize="14sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#252525"
+                            android:layout_marginBottom="10dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <Button
+                            android:id="@+id/openSettingsBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:text="Enable Accessibility Service"
+                            android:textSize="14sp"
+                            android:textColor="#0F0F0F"
+                            android:backgroundTint="#00D9FF"
+                            android:layout_marginBottom="10dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <Button
+                            android:id="@+id/refreshBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:text="Refresh"
+                            android:textSize="14sp"
+                            android:textColor="#AAAAAA"
+                            android:backgroundTint="#1C1C1C"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <!-- WEEKLY TAB -->
+                <ScrollView
+                    android:id="@+id/weeklyTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="THIS WEEK"
+                            android:textSize="11sp"
+                            android:textColor="#666666"
+                            android:letterSpacing="0.15"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/weeklyCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="72sp"
+                            android:textStyle="bold"
+                            android:textColor="#00D9FF"
+                            android:lineSpacingMultiplier="0.85"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="reels watched"
+                            android:textSize="14sp"
+                            android:textColor="#666666"
+                            android:layout_marginBottom="28dp" />
+
+                        <!-- Stats row: Distance + Speed -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:background="#1C1C1C"
+                                android:padding="14dp"
+                                android:layout_marginEnd="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="DISTANCE"
+                                    android:textSize="10sp"
+                                    android:textColor="#555555"
+                                    android:letterSpacing="0.12"
+                                    android:layout_marginBottom="4dp" />
+
+                                <TextView
+                                    android:id="@+id/weeklyDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.00 km"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#00FF88" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:background="#1C1C1C"
+                                android:padding="14dp"
+                                android:layout_marginStart="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="AVG SPEED"
+                                    android:textSize="10sp"
+                                    android:textColor="#555555"
+                                    android:letterSpacing="0.12"
+                                    android:layout_marginBottom="4dp" />
+
+                                <TextView
+                                    android:id="@+id/weeklyRPM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0 rpm"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#FF9800" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Weekly Limit Button -->
+                        <Button
+                            android:id="@+id/weeklyLimitBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:text="Set Weekly Limit"
+                            android:textSize="14sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#252525"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="You receive a push notification every Sunday with your weekly stats."
+                            android:textSize="12sp"
+                            android:textColor="#444444" />
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <!-- LIFETIME TAB -->
+                <ScrollView
+                    android:id="@+id/lifetimeTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="LIFETIME"
+                            android:textSize="11sp"
+                            android:textColor="#666666"
+                            android:letterSpacing="0.15"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/lifetimeCount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="72sp"
+                            android:textStyle="bold"
+                            android:textColor="#00D9FF"
+                            android:lineSpacingMultiplier="0.85"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="reels watched"
+                            android:textSize="14sp"
+                            android:textColor="#666666"
+                            android:layout_marginBottom="28dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="24dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:background="#1C1C1C"
+                                android:padding="14dp"
+                                android:layout_marginEnd="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="DISTANCE"
+                                    android:textSize="10sp"
+                                    android:textColor="#555555"
+                                    android:letterSpacing="0.12"
+                                    android:layout_marginBottom="4dp" />
+
+                                <TextView
+                                    android:id="@+id/lifetimeDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.00 km"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#00FF88" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:background="#1C1C1C"
+                                android:padding="14dp"
+                                android:layout_marginStart="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="AVG SPEED"
+                                    android:textSize="10sp"
+                                    android:textColor="#555555"
+                                    android:letterSpacing="0.12"
+                                    android:layout_marginBottom="4dp" />
+
+                                <TextView
+                                    android:id="@+id/lifetimeRPM"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0 rpm"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#FF9800" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/resetLifetimeBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="52dp"
+                            android:text="Reset Lifetime Count"
+                            android:textSize="14sp"
+                            android:textColor="#FFFFFF"
+                            android:backgroundTint="#8B0000"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp" />
+
+                    </LinearLayout>
+                </ScrollView>
+
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+    <!-- Settings Panel -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#161616"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="20dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Reel Counter"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:paddingBottom="16dp" />
-
-        <TextView
-            android:id="@+id/statusText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:paddingBottom="16dp" />
-
-        <Button
-            android:id="@+id/openSettingsBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Open Accessibility Settings" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/dividerHorizontal"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:id="@+id/debounceLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Debounce: 0.6s" />
-
-        <SeekBar
-            android:id="@+id/debounceSeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="19"
-            android:progress="0"
-            android:paddingBottom="8dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Max one count every N seconds. Range 0.5s – 10s."
-            android:textSize="12sp"
-            android:paddingBottom="16dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/dividerHorizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Diagnostic mode -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingBottom="4dp">
+            android:layout_marginBottom="8dp">
 
-            <Switch
-                android:id="@+id/diagnosticSwitch"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="DEBOUNCE"
+                android:textSize="10sp"
+                android:textColor="#555555"
+                android:letterSpacing="0.12" />
+
+            <TextView
+                android:id="@+id/debounceLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Diagnostic logging (adb logcat -s ReelCounter)"
-                android:textSize="13sp" />
+                android:text="0.5s"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#CCCCCC" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Turn on, open Instagram, swipe a few Reels, then run:\nadb logcat -s ReelCounter\nto see what className/dy values actually arrive."
-            android:textSize="12sp"
-            android:paddingBottom="16dp" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="2dp">
 
-        <View
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="0s" android:textSize="9sp"
+                android:textColor="#444444" android:gravity="start" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="2.5s" android:textSize="9sp"
+                android:textColor="#444444" android:gravity="center" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="5s" android:textSize="9sp"
+                android:textColor="#444444" android:gravity="center" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="7.5s" android:textSize="9sp"
+                android:textColor="#444444" android:gravity="center" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="10s" android:textSize="9sp"
+                android:textColor="#444444" android:gravity="end" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/debounceSeek"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/dividerHorizontal"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp" />
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="Today" android:textSize="16sp" />
-        <TextView android:id="@+id/todayCount" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:textSize="40sp" android:textStyle="bold"
-            android:paddingBottom="16dp" />
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="This week" android:textSize="16sp" />
-        <TextView android:id="@+id/weekCount" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:textSize="32sp"
-            android:paddingBottom="16dp" />
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="This month" android:textSize="16sp" />
-        <TextView android:id="@+id/monthCount" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:textSize="32sp"
-            android:paddingBottom="16dp" />
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="This year" android:textSize="16sp" />
-        <TextView android:id="@+id/yearCount" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:textSize="32sp"
-            android:paddingBottom="24dp" />
-
-        <Button
-            android:id="@+id/refreshBtn"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Refresh" />
+            android:layout_marginBottom="14dp"
+            android:progressTint="#00D9FF"
+            android:thumbTint="#00D9FF" />
+
+        <Switch
+            android:id="@+id/diagnosticSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Diagnostic mode (see Logcat)"
+            android:textSize="13sp"
+            android:textColor="#666666" />
+
     </LinearLayout>
-</ScrollView>
+
+</LinearLayout>

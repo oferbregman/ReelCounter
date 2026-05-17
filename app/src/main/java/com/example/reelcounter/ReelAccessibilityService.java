@@ -10,26 +10,11 @@ public class ReelAccessibilityService extends AccessibilityService {
 
     private static final String IG_PACKAGE = "com.instagram.android";
     private static final String TAG = "ReelCounter";
-
-    /**
-     * DIAGNOSTIC MODE (Prefs.KEY_DIAGNOSTIC = true):
-     *   Logs every scroll event from Instagram so you can see exactly what
-     *   className / dx / dy / scrollX / scrollY values arrive when you swipe
-     *   a Reel. Run: adb logcat -s ReelCounter
-     *   Then disable diagnostic mode and fill in REEL_CLASS_HINT below.
-     *
-     * NORMAL MODE:
-     *   Uses the className observed in diagnostic mode to identify the Reels
-     *   ViewPager, then counts one swipe per debounce window.
-     *   No delta-value filtering — Instagram's reported deltas vary too much
-     *   across versions to rely on.
-     */
-
-    // Set this to the class name fragment you observe in diagnostic logs,
-    // e.g. "viewpager", "pager", "X3c", etc.  Empty string = accept all classes.
     private static final String REEL_CLASS_HINT = "";
+    private static final long SESSION_TIMEOUT_MS = 500L;
 
     private long lastCountedAt = 0L;
+    private long currentSessionId = 0L;
     private SharedPreferences prefs;
 
     @Override
@@ -37,6 +22,7 @@ public class ReelAccessibilityService extends AccessibilityService {
         super.onServiceConnected();
         prefs = getApplicationContext()
                 .getSharedPreferences(Prefs.NAME, Context.MODE_PRIVATE);
+        currentSessionId = System.currentTimeMillis();
         Log.i(TAG, "Service connected. Diagnostic=" + isDiagnostic());
     }
 
@@ -60,39 +46,57 @@ public class ReelAccessibilityService extends AccessibilityService {
             Log.d(TAG, "SCROLL  cls=" + cls
                     + "  dx=" + dx + " dy=" + dy
                     + "  sx=" + sx + " sy=" + sy + " maxY=" + max);
-            // In diagnostic mode still try to count so you can cross-check.
         }
 
-        // --- Class filter ---
-        // Hard-exclude known non-Reels views.
         String clsLower = cls.toLowerCase();
-        if (clsLower.contains("recycler")) return;  // Feed / Explore
+        if (clsLower.contains("recycler")) return;
         if (clsLower.contains("listview")) return;
         if (clsLower.contains("horizontalscroll")) return;
         if (clsLower.contains("nestedscroll")) return;
 
-        // If we have a known hint from diagnostic logs, require it.
         if (!REEL_CLASS_HINT.isEmpty() && !clsLower.contains(REEL_CLASS_HINT.toLowerCase())) {
             return;
         }
 
-        // --- Direction filter: must be a vertical scroll ---
-        boolean hasDeltas = (dx != 0 || dy != 0);
-        if (hasDeltas && Math.abs(dx) > Math.abs(dy)) return; // horizontal
+        boolean hasDeltas = (dx != 0);
+        if (hasDeltas && Math.abs(dx) > Math.abs(dy)) return;
 
-        // --- Debounce ---
+        if (dy < 0) {
+            if (isDiagnostic()) Log.d(TAG, "IGNORED negative dy=" + dy);
+            return;
+        }
+
+        long now = System.currentTimeMillis();
         long debounceMs = prefs != null
                 ? prefs.getLong(Prefs.KEY_DEBOUNCE_MS, Prefs.DEFAULT_DEBOUNCE_MS)
                 : Prefs.DEFAULT_DEBOUNCE_MS;
 
-        long now = System.currentTimeMillis();
-        if (now - lastCountedAt < debounceMs) return;
+        if (now - lastCountedAt < SESSION_TIMEOUT_MS) {
+            if (isDiagnostic()) Log.d(TAG, "IGNORED same session (within " + SESSION_TIMEOUT_MS + "ms)");
+            return;
+        }
+
+        if (now - lastCountedAt < debounceMs) {
+            if (isDiagnostic()) Log.d(TAG, "IGNORED debounce window (" + debounceMs + "ms)");
+            return;
+        }
+
         lastCountedAt = now;
+        currentSessionId = now;
 
-        if (isDiagnostic()) Log.i(TAG, "COUNTED  cls=" + cls + "  dy=" + dy);
+        if (isDiagnostic()) {
+            Log.i(TAG, "COUNTED  cls=" + cls + "  dy=" + dy + "  session=" + currentSessionId);
+        }
 
+        // Insert first, then check limits — order matters.
+        // checkLimitsAndNotify queries the DB, so the new row must already be committed.
         AppDatabase db = AppDatabase.getInstance(getApplicationContext());
-        new Thread(() -> db.swipeDao().insert(new SwipeEvent(now))).start();
+        final long sessionId = currentSessionId;
+        new Thread(() -> {
+            db.swipeDao().insert(new SwipeEvent(now, dy, sessionId));
+            // Now the row is in the DB — limit check will see the correct count.
+            WeeklyReportManager.checkLimitsAndNotify(getApplicationContext());
+        }).start();
     }
 
     private boolean isDiagnostic() {

@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.reelcounter">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"
+        tools:ignore="ScheduleExactAlarm" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
+        android:name=".ReelCounterApp"
         android:allowBackup="true"
-        android:label="Reel Counter"
-        android:icon="@android:drawable/ic_menu_view"
-        android:theme="@style/Theme.AppCompat.DayNight">
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ReelCounter"
+        tools:targetApi="31">
 
         <activity
             android:name=".MainActivity"
@@ -19,9 +31,8 @@
 
         <service
             android:name=".ReelAccessibilityService"
-            android:exported="true"
-            android:label="Reel Counter"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -29,5 +40,15 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
+
+        <receiver
+            android:name=".WeeklyReportBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.reelcounter.WEEKLY_REPORT" />
+            </intent-filter>
+        </receiver>
+
     </application>
+
 </manifest>
